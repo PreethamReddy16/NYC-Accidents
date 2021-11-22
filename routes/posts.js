@@ -71,12 +71,16 @@ router.get('/read',function(req,res)
 
 });
 
-router.get('/search', function(req,res){
-  Post.find({'BOROUGH':"MANHATTAN" },{BOROUGH:1}).limit(10)
+router.get('/:search/:date', function(req,res){
+  var bor=req.params.search;
+  var dat=req.params.date;
+  Post.aggregate( [{$match :{BOROUGH:bor,LONGITUDE:dat }},{$group:{_id:null,count: { $sum: 1 }}}])
   .then(data => res.json(data))
   .catch(err => res.status(400).json('Error: ' + err));
 
 })
+
+
 
 
 router.route('/geoSearch/:LONGITUDE/:LATITUDE').get((req, res) => {
@@ -104,7 +108,7 @@ router.route('/geoSearch/:LONGITUDE/:LATITUDE').get((req, res) => {
 // router.route('/geoSearch').get((req, res) => {
 //     var LONGITUDE = req.params.longitude;
 //     var LATITUDE = req.params.latitude;
-//     Post.find(
+//     Post.find( 
 //         {
 //           '$project': {
 //             '_id': 0, 
