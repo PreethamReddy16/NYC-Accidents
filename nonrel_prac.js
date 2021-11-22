@@ -1,7 +1,8 @@
+
 var cors = require('cors');
 const express=require('express')
 const app=express();
-const bodyParser=require('body-parser');
+const bodyParser = require('body-parser');
 //const mongodb=require('mongodb');
 const mongoose  = require('mongoose');
 app.use(bodyParser.json());
@@ -22,7 +23,7 @@ console.log('Connected to MongoDB'));
 const postsRoute=require('./routes/posts');
 
 
-app.use('/posts',postsRoute)
+app.use('/posts',postsRoute);
 
 
 //list of db
