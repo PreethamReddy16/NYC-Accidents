@@ -63,18 +63,54 @@ router.get('/pani',(req,res) => {
 
 // })
 
-router.get('/read',function(req,res)
-   {
+
+//finds a one radom data record
+router.get('/read',async(req,res)=>
+  {
     Post.findOne({},{LOCATION:1})
     .then(data => res.json(data))
     .catch(err => res.status(400).json('Error: ' + err));
 
 });
 
-router.get('/:search/:date', function(req,res){
+
+//Counts incidents in each BOROUGH where atleast one person were killed
+router.get('/atleast_1',async(req,res)=>{
   var bor=req.params.search;
-  var dat=req.params.date;
-  Post.aggregate( [{$match :{BOROUGH:bor,LONGITUDE:dat }},{$group:{_id:null,count: { $sum: 1 }}}])
+  //var dat=req.params.date;
+  Post.aggregate( [{$match :{"PERSONS KILLED":{$ne:"0"}}},{$group:{_id:"$BOROUGH",count: { $sum: 1 }}}])
+  .then(data => res.json(data))
+  .catch(err => res.status(400).json('Error: ' + err));
+
+})
+
+router.get('/search/q',async(req,res)=>{
+  var bor=req.params.search;
+  //var dat=req.params.date;
+  Post.aggregate( [{$match :{"PEDESTRIANS KILLED":"2"}},{$group:{_id:"$BOROUGH",count: { $sum: 1 }}}])
+  .then(data => res.json(data))
+  .catch(err => res.status(400).json('Error: ' + err));
+
+})
+
+
+//output_explain:---gives no.of PERSONS KILLED where '_id' defines count of killed, 'count' representes total till on that location overall
+router.get('/perkilled/:LONGITUDE/:LATITUDE',async(req,res)=>{
+  var lon=req.params.LONGITUDE;
+  var lat=req.params.LATITUDE;
+  Post.aggregate( [{$match :{LONGITUDE:lon,LATITUDE:lat }},{$group:{_id:"$PERSONS KILLED",count: { $sum: 1 }}}])
+  .then(data => res.json(data))
+  .catch(err => res.status(400).json('Error: ' + err));
+
+})
+
+
+
+//output_explain:---gives no.of PERSONS INJURED where '_id' defines count of injured, 'count' representes total till on that location overall
+router.get('/perinjured/:LONGITUDE/:LATITUDE',async(req,res)=>{
+  var lon=req.params.LONGITUDE;
+  var lat=req.params.LATITUDE;
+  Post.aggregate( [{$match :{LONGITUDE:lon,LATITUDE:lat }},{$group:{_id:"$PERSONS INJURED",count: { $sum: 1 }}}])
   .then(data => res.json(data))
   .catch(err => res.status(400).json('Error: ' + err));
 
@@ -83,7 +119,9 @@ router.get('/:search/:date', function(req,res){
 
 
 
-router.route('/geoSearch/:LONGITUDE/:LATITUDE').get((req, res) => {
+
+
+router.route('/geoSearch/:LONGITUDE/:LATITUDE').get(async(req, res) => {
   var long = req.params.LONGITUDE;
   var lat = req.params.LATITUDE;
   Post.find({
