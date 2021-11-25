@@ -33,8 +33,11 @@ router.get('/rit',(req,res) => {
 // })
 
 router.get('/',(req,res) => {
-    res.send("Go RIT!")
+  res.send('RIT')
 });
+
+
+
 router.get('/pani',(req,res) => {
   res.send("Go!")
 });
@@ -65,13 +68,40 @@ router.get('/pani',(req,res) => {
 
 
 //finds a one radom data record
+// router.get('/test',async(req,res)=>
+//   {
+//     Post.findOne({},function(err,accidents){
+//       res.render('test',{
+//         cityList:accidents
+
+//       });
+//     }
+
+//     )
+    
+
+// });
+
+
 router.get('/read',async(req,res)=>
   {
-    Post.findOne({},{LOCATION:1})
+    Post.find({},{LOCATION:1})
     .then(data => res.json(data))
     .catch(err => res.status(400).json('Error: ' + err));
 
 });
+
+router.get('/accidents',async(req,res)=>{
+  var bor=req.params.search;
+  //var dat=req.params.date;
+  Post.aggregate( [{$match :{}},{$group:{_id:"$BOROUGH",count: { $sum: 1 }}}])
+  .then(data => res.json(data))
+  .catch(err => res.status(400).json('Error: ' + err));
+
+})
+
+
+
 
 
 //Counts incidents in each BOROUGH where atleast one person were killed
@@ -84,11 +114,13 @@ router.get('/atleast_1',async(req,res)=>{
 
 })
 
+
+
 router.get('/search/q',async(req,res)=>{
   var bor=req.params.search;
   //var dat=req.params.date;
   Post.aggregate( [{$match :{"PEDESTRIANS KILLED":"2"}},{$group:{_id:"$BOROUGH",count: { $sum: 1 }}}])
-  .then(data => res.json(data))
+  .then(data => res.render.json('test',{data}))
   .catch(err => res.status(400).json('Error: ' + err));
 
 })
@@ -134,7 +166,7 @@ router.route('/geoSearch/:LONGITUDE/:LATITUDE').get(async(req, res) => {
               $maxDistance: 5000
           }
       }
-  },{LOCATION:1,BOROUGH:1}).limit(5)
+  },{LOCATION:1,BOROUGH:1,'PERSONS KILLED':1,'PERSONS INJURED':1}).limit(5)
   .then(data => {
     res.json(data)
   })
@@ -165,4 +197,7 @@ router.route('/geoSearch/:LONGITUDE/:LATITUDE').get(async(req, res) => {
 
 
 
+
+
 module.exports=router;
+
