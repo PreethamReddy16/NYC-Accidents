@@ -16,8 +16,8 @@ long=long;
 lat=lat;
 
 
-const api_url = "http://localhost:4000/posts/nearby/long/lat";
-const p='ON STREET NAME';
+const api_url = `http://localhost:4000/posts/nearby/${long}/${lat}`;
+
 
 async function getapi(url) {
 
@@ -45,6 +45,7 @@ function hideloader() {
 
 // Function to define innerHTML for HTML table
 function show(data) {
+
     let tab = 
         `<tr>
           <th>BOROUGH</th>
@@ -60,7 +61,7 @@ function show(data) {
     
     <td>${r.BOROUGH} </td>
     <td>${r.LOCATION}</td>
-    <td>${r.p}</td>
+    <td>${r['ON STREET NAME']}</td>
 
     
    
