@@ -16,8 +16,8 @@ long=long;
 lat=lat;
 
 
-const api_url = "http://localhost:4000/posts/nearby/long/lat";
-const p='ON STREET NAME';
+const api_url = `http://localhost:4000/posts/perinjured/${long}/${lat}`;
+
 
 async function getapi(url) {
 
@@ -45,11 +45,12 @@ function hideloader() {
 
 // Function to define innerHTML for HTML table
 function show(data) {
+
     let tab = 
         `<tr>
-          <th>BOROUGH</th>
-          <th>LOCATION</th>
-          <th>STREET NAME</th>
+          <th>People Injured</th>
+          <th>Accidents Count</th>
+          
          
          </tr>`;
      
@@ -58,9 +59,9 @@ function show(data) {
         
         tab += `<tr> 
     
-    <td>${r.BOROUGH} </td>
-    <td>${r.LOCATION}</td>
-    <td>${r.p}</td>
+    <td>${r._id} </td>
+    <td>${r.count}</td>
+   
 
     
    
@@ -68,7 +69,7 @@ function show(data) {
     </tr>`;
     }
     // Setting innerHTML as tab variable
-    document.getElementById("near").innerHTML = tab;
+    document.getElementById("personsInjured").innerHTML = tab;
 }
 }
     

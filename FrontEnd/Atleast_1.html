@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="./assets/js/atleast.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./assets/css/atleast.css">
+</head>
+<body>
+    <button onclick="document.location= './index.html'" class="homeBtn">New Search</button>
+    <button onclick="document.location= './close.html'" class="homeBtn" style="float:right;">QUIT</button><br>
+     <!-- Here a loader is created which 
+             loads till response comes -->
+             <div class="d-flex justify-content-center">
+                <div class="spinner-border" 
+                     role="status" id="loading">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            <h1>Accedents were atleast one dead</h1>
+            <!-- table for showing data -->
+            <table id="atleast"></table>
+    
+</body>
+</html>

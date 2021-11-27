@@ -83,6 +83,11 @@ router.get('/pani',(req,res) => {
 // });
 
 
+
+
+
+
+
 router.get('/read',async(req,res)=>
   {
     Post.find({},{LOCATION:1})
@@ -90,6 +95,18 @@ router.get('/read',async(req,res)=>
     .catch(err => res.status(400).json('Error: ' + err));
 
 });
+
+router.get('/rename',async(req,res)=>
+  {
+    Post.aggregate([{"$project":{"STREET NAME":"$ON STREET NAME"}}])
+    .then(data => res.json(data))
+    .catch(err => res.status(400).json('Error: ' + err));
+
+});
+
+
+
+
 
 router.get('/accidents',async(req,res)=>{
   var bor=req.params.search;
@@ -116,7 +133,7 @@ router.get('/atleast_1',async(req,res)=>{
 
 
 
-router.get('/search/q',async(req,res)=>{
+router.get('/search/q',(req,res)=>{
   var bor=req.params.search;
   //var dat=req.params.date;
   Post.aggregate( [{$match :{"PEDESTRIANS KILLED":"2"}},{$group:{_id:"$BOROUGH",count: { $sum: 1 }}}])
@@ -172,6 +189,52 @@ router.route('/geoSearch/:LONGITUDE/:LATITUDE').get(async(req, res) => {
   })
   .catch(err => res.status(400).json('Error: ' + err));
 });
+
+
+router.route('/nearby/:LONGITUDE/:LATITUDE').get(async(req, res) => {
+  var long = req.params.LONGITUDE;
+  var lat = req.params.LATITUDE;
+  
+  
+  Post.find({
+      $near:{
+          $geoNear:{
+              $geometry: {
+                  type:"Point",
+                  coordinates: [parseFloat(long), parseFloat(lat)]
+              },
+              $maxDistance: 2
+          }
+      }
+  },{LOCATION:1,BOROUGH:1,'ON STREET NAME':1}).limit(200)
+  .then(data => {
+    res.json(data)
+  })
+  .catch(err => res.status(400).json('Error: ' + err));
+});
+
+// router.route('/nearby/:LONGITUDE/:LATITUDE').get(async(req, res) => {
+//   var long = req.params.LONGITUDE;
+//   var lat = req.params.LATITUDE;
+//   post=Post.aggregate([{"$project":{"STREET NAME":"$ON STREET NAME","LOCATION":"$LOCATION","BOROUGH":"$BOROUGH"}}])
+//   post.find({
+//       $near:{
+//           $geoNear:{
+//               $geometry: {
+//                   type:"Point",
+//                   coordinates: [parseFloat(long), parseFloat(lat)]
+//               },
+//               $maxDistance: 2
+//           }
+//       }
+//   },{LOCATION:1,BOROUGH:1,STREET_NAME:1}).limit(4)
+//   .then(data => {
+//     res.json(data)
+//   })
+//   .catch(err => res.status(400).json('Error: ' + err));
+// });
+
+
 
 
 

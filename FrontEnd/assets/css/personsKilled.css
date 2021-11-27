@@ -8,7 +8,7 @@ h1 {
       background-color: rgb(255, 255, 255);
       border-radius: 10px;
   }
-  #accidents{
+  #personsKilled{
     margin-left: auto;
     margin-right: auto;
     font-weight: bolder;
@@ -28,12 +28,14 @@ h1 {
     position: absolute;
       /*height: 80%;*/
       /*width: 80%;*/
-    top: 50%;
-    left: 50%;
+    top: 25%;
+    left: 15%;
       /*align-items: stretch;*/
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
   }
+
+  
   
    .btn {
        align-items: center;
@@ -77,6 +79,15 @@ h1 {
     border-radius: 8px;
     border: 0.5px solid white;
 }
+.inputSearch:hover{
+    float: left;
+    background-color: rgb(199, 133, 53);
+    color: white;
+}
+.inputSearch{
+    float: right;
+  
+}
 table, th, td {
     border: 1px solid white;
     border-collapse: collapse;
@@ -84,6 +95,8 @@ table, th, td {
   th, td {
     background-color: #009CBD;
   }
+
+
 
   
   
