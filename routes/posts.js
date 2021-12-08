@@ -126,6 +126,32 @@ router.get('/atleast_1/:search',async(req,res)=>{
   var bor=req.params.search;
   bor=bor.toUpperCase();
   //var dat=req.params.date;
+  if (bor.match(/^qu/i)){
+    bor='QUEENS';
+    console.log("we");
+
+  }else if(bor.match(/^bron/i)){
+    bor='bronx' ;
+
+  }
+ 
+else if(bor.match(/^brok/i)){
+    bor='brooklyn';
+
+  }
+
+else if(bor.match(/^m/i)){
+    bor='manhattan';
+
+  }
+
+else if(bor.match(/^st/i)){
+    bor='Staten island';
+   
+  }
+
+  bor = bor.toUpperCase();
+
   Post.aggregate( [{$match :{"PERSONS KILLED":{$ne:"0"},BOROUGH:bor}},{$group:{_id:"$BOROUGH",count: { $sum: 1 }}}])
   .then(data => res.json(data))
   .catch(err => res.status(400).json('Error: ' + err));
@@ -136,33 +162,36 @@ router.get('/accidents/:search',async(req,res)=>{
   var bor=req.params.search;
   bor=bor.toUpperCase();
 
-// if (bor=/^qu/i){
-//     bor='QUEENS';
 
   
-//   }
- 
-// if(bor=/^bron/i){
-//     bor='bronx' ;
+console.log(bor);
+  if (bor.match(/^qu/i)){
+     bor='QUEENS';
+     console.log("we");
 
-//   }
+   }else if(bor.match(/^bron/i)){
+     bor='bronx' ;
+
+   }
   
-// if(bor=/^brok/i){
-//     bor='broklyn';
+ else if(bor.match(/^brok/i)){
+     bor='brooklyn';
  
-//   }
+   }
  
-// if(bor=/^man/i){
-//     bor='manhattan'
+ else if(bor.match(/^m/i)){
+     bor='manhattan';
  
-//   }
+   }
  
-// if(bor=/^st/i){
-//     bor='Staten island'
+ else if(bor.match(/^st/i)){
+     bor='Staten island';
     
-//   }
+   }
 
-// bor =bor.toUpperCase();
+bor = bor.toUpperCase();
+
+
 
   // var pattr1='/^';
   // var pattr2='/i';
@@ -173,6 +202,8 @@ router.get('/accidents/:search',async(req,res)=>{
 Post.aggregate( [{$match :{BOROUGH:bor}},{$group:{_id:"$BOROUGH",count: { $sum: 1 }}}])
   .then(data => res.json(data))
   .catch(err => res.status(400).json('Error: ' + err));
+
+
  
 
 })
