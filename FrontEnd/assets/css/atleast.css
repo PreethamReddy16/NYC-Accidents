@@ -87,5 +87,11 @@ table, th, td {
   }
 
 
-  
+  .inputSearch{
+    
+    width: 200px;
+  height: 30px;
+  border: 1px solid blue;
+  border-radius: 5px;
+  }
   

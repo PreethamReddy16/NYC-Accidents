@@ -122,12 +122,58 @@ router.get('/accidents',async(req,res)=>{
 
 
 //Counts incidents in each BOROUGH where atleast one person were killed
-router.get('/atleast_1',async(req,res)=>{
+router.get('/atleast_1/:search',async(req,res)=>{
   var bor=req.params.search;
+  bor=bor.toUpperCase();
   //var dat=req.params.date;
-  Post.aggregate( [{$match :{"PERSONS KILLED":{$ne:"0"}}},{$group:{_id:"$BOROUGH",count: { $sum: 1 }}}])
+  Post.aggregate( [{$match :{"PERSONS KILLED":{$ne:"0"},BOROUGH:bor}},{$group:{_id:"$BOROUGH",count: { $sum: 1 }}}])
   .then(data => res.json(data))
   .catch(err => res.status(400).json('Error: ' + err));
+
+})
+
+router.get('/accidents/:search',async(req,res)=>{
+  var bor=req.params.search;
+  bor=bor.toUpperCase();
+
+// if (bor=/^qu/i){
+//     bor='QUEENS';
+
+  
+//   }
+ 
+// if(bor=/^bron/i){
+//     bor='bronx' ;
+
+//   }
+  
+// if(bor=/^brok/i){
+//     bor='broklyn';
+ 
+//   }
+ 
+// if(bor=/^man/i){
+//     bor='manhattan'
+ 
+//   }
+ 
+// if(bor=/^st/i){
+//     bor='Staten island'
+    
+//   }
+
+// bor =bor.toUpperCase();
+
+  // var pattr1='/^';
+  // var pattr2='/i';
+  // pattr1=pattr1.concat(bor);
+  // pattr1=pattr1.concat(pattr2);
+  // pattr=String(pattr1);
+  //var dat=req.params.date;
+Post.aggregate( [{$match :{BOROUGH:bor}},{$group:{_id:"$BOROUGH",count: { $sum: 1 }}}])
+  .then(data => res.json(data))
+  .catch(err => res.status(400).json('Error: ' + err));
+ 
 
 })
 
@@ -201,15 +247,14 @@ router.route('/nearby/:LONGITUDE/:LATITUDE').get(async(req, res) => {
           $geoNear:{
               $geometry: {
                   type:"Point",
-                  coordinates: [parseFloat(long), parseFloat(lat)]
+                  coordinates: [long, lat]
               },
-              $maxDistance: 2
+              $maxDistance:100,
+              $maxDistance: 500
           }
       }
   },{LOCATION:1,BOROUGH:1,'ON STREET NAME':1}).limit(200)
-  .then(data => {
-    res.json(data)
-  })
+  .then(data => res.json(data))
   .catch(err => res.status(400).json('Error: ' + err));
 });
 
